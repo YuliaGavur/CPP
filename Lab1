@@ -1,0 +1,28 @@
+import 'dart:math';
+
+void main() {
+  double xStart = 6.15;
+  double xEnd = xStart + 10;
+  double dx = 1;
+  double y = 23;
+  double z = 7.32;
+  
+  Function ft = outer(y, z);
+  
+  for (double x = xStart; x <= xEnd; x += dx) {
+    ft(x);
+  }
+}
+
+Function outer(double y, double z) {
+  Function b = (double x, double y, double z) {
+    return (pow(y, 2) + pow(z, 2)) / pow(tan(x), 2);
+  };
+
+  
+  return (double x) {
+    double a = 1 - pow(b(x, y, z), 2) + pow(sin(pow(y, 3)), 2) + y - z;
+    
+    print("x=${x.toStringAsFixed(2)} y=${y.toStringAsFixed(2)} z=${z.toStringAsFixed(2)} a=${a.toStringAsFixed(3)}");
+  };
+}
