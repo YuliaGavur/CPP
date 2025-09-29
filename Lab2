@@ -1,0 +1,115 @@
+void main() {
+  List orchestra = [];
+
+  orchestra.add(PercussionInstrument("Барабан", "5"));
+  orchestra.add(StringInstrument("Скрипка", "4"));
+  orchestra.add(WindInstrument("Флейта", "Дерево"));
+  orchestra.add(PercussionInstrument("Тимпани", "3"));
+  orchestra.add(StringInstrument("Гітара", "6"));
+  orchestra.add(WindInstrument("Труба", "Метал"));
+
+  print("Склад оркестру:");
+  for (int i = 0; i < orchestra.length; i++) {
+    print(orchestra[i].toString());
+  }
+
+  print("\nГра оркестру:");
+  for (var instrument in orchestra) {
+    instrument.play();
+  }
+}
+
+abstract class Instrument {
+  String name;
+
+  Instrument(this.name);
+
+  String getName() => name;
+  void setName(String name) => this.name = name;
+
+  String getInfo();
+}
+
+abstract class MusicalInstrument {
+  void play();
+}
+
+mixin Playable on Instrument implements MusicalInstrument {
+  @override
+  void play() {
+    print("${getName()} грає музичну партію.");
+  }
+}
+
+class PercussionInstrument extends Instrument with Playable {
+  String numberOfPieces;
+
+  PercussionInstrument(String name, this.numberOfPieces) : super(name);
+
+  String getNumberOfPieces() => numberOfPieces;
+  void setNumberOfPieces(String numberOfPieces) => this.numberOfPieces = numberOfPieces;
+
+  @override
+  void play() {
+    print("${getName()} грає ритм з ${getNumberOfPieces()} частин(и).");
+  }
+
+  @override
+  String getInfo() {
+    return "Ударний інструмент, кількість частин: ${getNumberOfPieces()}";
+  }
+
+  @override
+  String toString() {
+    return "Інструмент: ${getName()}, ${getInfo()}";
+  }
+}
+
+// Струнний інструмент
+class StringInstrument extends Instrument with Playable {
+  String numberOfStrings;
+
+  StringInstrument(String name, this.numberOfStrings) : super(name);
+
+  String getNumberOfStrings() => numberOfStrings;
+  void setNumberOfStrings(String numberOfStrings) => this.numberOfStrings = numberOfStrings;
+
+  @override
+  void play() {
+    print("${getName()} звучить на ${getNumberOfStrings()} струнах.");
+  }
+
+  @override
+  String getInfo() {
+    return "Струнний інструмент, кількість струн: ${getNumberOfStrings()}";
+  }
+
+  @override
+  String toString() {
+    return "Інструмент: ${getName()}, ${getInfo()}";
+  }
+}
+
+class WindInstrument extends Instrument with Playable {
+  String material;
+
+  WindInstrument(String name, this.material) : super(name);
+
+  String getMaterial() => material;
+  void setMaterial(String material) => this.material = material;
+
+  @override
+  void play() {
+    print("${getName()} грає, виготовлена з ${getMaterial()}.");
+  }
+
+  @override
+  String getInfo() {
+    return "Духовий інструмент, матеріал: ${getMaterial()}";
+  }
+
+  @override
+  String toString() {
+    return "Інструмент: ${getName()}, ${getInfo()}";
+  }
+}
