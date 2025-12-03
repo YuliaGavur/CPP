@@ -1,0 +1,128 @@
+class TemperatureMeasurement {
+  DateTime _date;
+  double _temperature;
+  String _comment;
+
+  TemperatureMeasurement(this._date, this._temperature, this._comment);
+
+  DateTime get date => _date;
+  double get temperature => _temperature;
+  String get comment => _comment;
+
+  set date(DateTime date) => _date = date;
+  set temperature(double temperature) => _temperature = temperature;
+  set comment(String comment) => _comment = comment;
+}
+
+class Weather {
+  int _year;
+  String _comment;
+  Set<TemperatureMeasurement> _measurements = {};
+
+  Weather(this._year, this._comment);
+
+  int get year => _year;
+  String get comment => _comment;
+  Set<TemperatureMeasurement> get measurements => _measurements;
+
+  set year(int year) => _year = year;
+  set comment(String comment) => _comment = comment;
+
+  void addMeasurement(TemperatureMeasurement measurement) {
+    _measurements.add(measurement);
+  }
+
+  TemperatureMeasurement? minTemperatureMeasurement() {
+    if (_measurements.isEmpty) return null;
+    return _measurements.reduce((a, b) => a.temperature < b.temperature ? a : b);
+  }
+
+  TemperatureMeasurement? measurementWithLongestComment() {
+    if (_measurements.isEmpty) return null;
+    return _measurements.reduce((a, b) => 
+        a.comment.split(' ').length > b.comment.split(' ').length ? a : b);
+  }
+
+  String lastWordOfComment() {
+    List<String> words = _comment.split(' ');
+    return words.isNotEmpty ? words.last : '';
+  }
+}
+
+class DataContainer<T> {
+  List<T> _items = [];
+
+  void addItem(T item) {
+    _items.add(item);
+  }
+
+  List<T> getAll() => _items;
+
+ 
+  T? findElement(bool Function(T) condition) {
+    for (var item in _items) {
+      if (condition(item)) return item;
+    }
+    return null;
+  }
+
+  T? getMinValue(num Function(T) selector) {
+    if (_items.isEmpty) return null;
+    T minItem = _items.first;
+    num minValue = selector(minItem);
+    for (var item in _items) {
+      num value = selector(item);
+      if (value < minValue) {
+        minValue = value;
+        minItem = item;
+      }
+    }
+    return minItem;
+  }
+
+  List<R> mapItems<R>(R Function(T) converter) {
+    return _items.map(converter).toList();
+  }
+}
+
+void main() {
+  Weather weather2025 = Weather(2025, "Погода цього року була дуже різноманітною");
+
+
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 1, 1), -5.0, "Сніг і мороз"));
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 2, 14), -2.1, "Холодний день з невеликим снігом"));
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 3, 20), 8.5, "Теплий весняний день"));
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 4, 10), 15.0, "Сонячно і тепло"));
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 5, 5), 20.3, "М'який весняний вітерець"));
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 6, 15), 25.5, "Сонячний день з легким вітерцем"));
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 7, 22), 30.1, "Спекотний літній день з високою температурою"));
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 8, 30), 28.0, "Теплий і вологий літній день"));
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 9, 12), 18.6, "Прохолодний осінній ранок"));
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 10, 5), 12.2, "Дощовий осінній день"));
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 11, 20), 5.0, "Хмарно і холодно"));
+  weather2025.addMeasurement(TemperatureMeasurement(DateTime(2025, 12, 31), -2.3, "Холодний вечір"));
+
+
+  var minTemp = weather2025.minTemperatureMeasurement();
+  print("Вимір з мінімальною температурою: ${minTemp?.temperature}°C, дата: ${minTemp?.date}, коментар: ${minTemp?.comment}");
+
+  var longestComment = weather2025.measurementWithLongestComment();
+print("Вимір з найбільшою кількістю слів у коментарі: ${longestComment?.comment}, дата: ${longestComment?.date}");
+
+  print("Останнє слово коментаря погоди: ${weather2025.lastWordOfComment()}");
+
+  
+  var container = DataContainer<TemperatureMeasurement>();
+  container.addItem(TemperatureMeasurement(DateTime(2025, 3, 20), 8.5, "Весняний день"));
+  container.addItem(TemperatureMeasurement(DateTime(2025, 6, 15), 25.5, "Сонячно"));
+  container.addItem(TemperatureMeasurement(DateTime(2025, 12, 31), -2.3, "Мороз"));
+
+  var coldest = container.getMinValue((m) => m.temperature);
+  print("Мінімальна температура в контейнері: ${coldest?.temperature}");
+
+  var found = container.findElement((m) => m.comment.contains("Сонячно"));
+  print("Знайдено вимір з коментарем 'Сонячно': ${found?.comment}");
+
+  var comments = container.mapItems((m) => m.comment);
+  print("Коментарі у контейнері: $comments");
+} 
