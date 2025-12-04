@@ -1,0 +1,168 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyLayoutApp());
+
+class MyLayoutApp extends StatelessWidget {
+  const MyLayoutApp({super.key});
+
+  static const double g = 400;
+  static const double h = 450;
+  static const double k = 150;
+  static const double d = 150;
+  static const double margin = 20.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Material Design + Custom Widget',
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: g,
+              maxHeight: h,
+            ),
+            child: Card(
+              elevation: 6,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(margin),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Верхній ряд
+                    SizedBox(
+                      height: 120,
+                      child: Row(
+                        children: [
+                          MyCustomBlock(
+                            text:
+                                'Ще не вмерла Україна, і\nслава, і воля,\nще нам, браття.',
+                            backgroundColor: Colors.yellow.shade600,
+                            textColor: Colors.black,
+                            width: k,
+                            height: 120,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            borderRadius: 12,
+                            padding: const EdgeInsets.all(8),
+                            bordered: false,
+                          ),
+                          const Expanded(child: SizedBox()),
+                          MyCustomBlock(
+                            text:
+                                'Згинуть наші вороженьки,\nяк роса на сонці,\nзапануєм і ми, браття,\nу своїй сторонці.',
+                            backgroundColor: Colors.lightBlue.shade200,
+                            textColor: Colors.black,
+                            width: 200,
+                            height: 120,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            borderRadius: 12,
+                            padding: const EdgeInsets.all(8),
+                            bordered: false,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 40),
+
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: MyCustomBlock(
+                        text: 'І покажем, що ми, браття,\nкозацького роду.',
+                        backgroundColor: Colors.white,
+                        textColor: Colors.black,
+                        width: 200,
+                        height: d,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        borderRadius: 12,
+                        padding: const EdgeInsets.all(8),
+                        bordered: true,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ───────────────────────────────────────────────────────────
+//      STATEFUL WIDGET З НОВИМИ ПАРАМЕТРАМИ
+// ───────────────────────────────────────────────────────────
+
+class MyCustomBlock extends StatefulWidget {
+  final String text;
+  final Color backgroundColor;
+  final Color textColor;
+  final double width;
+  final double height;
+  final double borderRadius;
+  final double fontSize;
+  final FontWeight fontWeight;
+  final bool bordered;
+  final EdgeInsetsGeometry padding;
+
+  const MyCustomBlock({
+    super.key,
+    required this.text,
+    required this.backgroundColor,
+    this.textColor = Colors.black,
+    required this.width,
+    required this.height,
+    this.borderRadius = 12,
+    this.fontSize = 15,
+    this.fontWeight = FontWeight.normal,
+    this.bordered = false,
+    this.padding = const EdgeInsets.all(12),
+  });
+
+  @override
+  State<MyCustomBlock> createState() => _MyCustomBlockState();
+}
+
+class _MyCustomBlockState extends State<MyCustomBlock> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: widget.width,
+      height: widget.height,
+      padding: widget.padding,
+      decoration: BoxDecoration(
+        color: widget.backgroundColor,
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+        border: widget.bordered
+            ? Border.all(color: Colors.black, width: 1.5)
+            : null,
+        boxShadow: [
+          BoxShadow(
+            // ignore: deprecated_member_use
+            color: Colors.black.withOpacity(0.12),
+            blurRadius: 6,
+            offset: const Offset(2, 3),
+          ),
+        ],
+      ),
+      child: Text(
+        widget.text,
+        style: TextStyle(
+          color: widget.textColor,
+          fontSize: widget.fontSize,
+          fontWeight: widget.fontWeight,
+          height: 1.3,
+        ),
+      ),
+    );
+  }
+}
