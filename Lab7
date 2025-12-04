@@ -1,0 +1,109 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    const double a = 5;   
+    const double b = 10;  
+    const double c = 35;  
+
+ 
+    const double totalHeight = a + b + c;
+    const double totalWidth = 500; 
+
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: const Color(0xFFF9F2FF),
+        body: Center(
+          child: SizedBox(
+            width: totalWidth,
+            height: totalHeight,
+            child: Stack(
+              children: [
+                
+                Container(
+                  width: totalWidth,
+                  height: totalHeight,
+                  color: Colors.yellow,
+                ),
+
+              
+                Positioned(
+                  top: a,
+                  left: a,
+                  child: Container(
+                    height: totalHeight - a,
+                    width: totalWidth - a,
+                    color: Colors.red,
+                  ),
+                ),
+
+             
+                Positioned(
+                  top: a + b,
+                  left: a + b,
+                  child: Container(
+                    height: c,
+                    width: totalWidth - (a + b),
+                    color: Colors.blue,
+                  ),
+                ),
+
+              
+                Positioned(
+                  top: (a + b) + (c / 2) - 12,
+                  left: a + b - 15,
+                  child: RichText(
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "z ",
+                          style: TextStyle(
+                            fontSize: 8,
+                            color: Colors.red,
+                       fontWeight:FontWeight.bold,                     
+                            
+                          ),
+                        ),
+                        TextSpan(
+                          text: "s ",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.purple,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "U",
+                          style: TextStyle(
+                            fontSize: 26,
+                            color: Colors.pinkAccent,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                
+Positioned(
+  top: (a + b) + (c / 2) - 12 + 25,
+  left: a + b - 20,
+  child: Container(
+    height: 2, 
+    width: 10, 
+    color: Colors.red, 
+  ),
+),
+
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
