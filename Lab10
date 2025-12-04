@@ -1,0 +1,162 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const ArtistsApp());
+
+class ArtistsApp extends StatelessWidget {
+  const ArtistsApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Світові художники',
+      theme: ThemeData(
+        colorSchemeSeed: Colors.deepPurple,
+        useMaterial3: true,
+      ),
+      home: const ArtistsListScreen(),
+    );
+  }
+}
+
+class Artist {
+  final String name;
+  final String imageUrl;
+  final String description;
+
+  Artist({
+    required this.name,
+    required this.imageUrl,
+    required this.description,
+  });
+}
+
+// ✔ 100% стабільні зображення (picsum photos)
+final List<Artist> artists = [
+  Artist(
+    name: 'Вінсент ван Гог',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0Fzj6tX334FOKXbfgKcfDb-rjqDgTfx6MMw&s',
+    description: 'Голландський постімпресіоніст, відомий своїми експресивними мазками та “Зоряною ніччю”.',
+  ),
+  Artist(
+    name: 'Леонардо да Вінчі',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFvIjocMtu9pe_YytYEK0AaDGJsiv2AxauPw&s',
+    description: 'Італійський художник та винахідник. Автор “Мона Лізи” та “Таємної вечері”.',
+  ),
+  Artist(
+    name: 'Пабло Пікассо',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvfAay9Ko1A1WF13TMNp4YDOwuisb7dGCMzQ&s',
+    description: 'Іспанський художник, один із засновників кубізму.',
+  ),
+  Artist(
+    name: 'Клод Моне',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCimoExFu3c90L_RKsVXoGS_p9M2YBM6y-Dg&s',
+    description: 'Один із засновників імпресіонізму. Відомий серіями “Водяні лілії”.',
+  ),
+  Artist(
+    name: 'Мікеланджело',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUUarq06TxHO1bMh_7bbnAPgL5BSU76E9wcQ&s',
+    description: 'Італійський художник і скульптор епохи Відродження.',
+  ),
+  Artist(
+    name: 'Сальвадор Далі',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzzYyCVL-nTzd38Q6Ljxif7OF3XXYWOcI3uQ&s',
+    description: 'Іспанський художник-сюрреаліст із унікальним стилем.',
+  ),
+];
+
+class ArtistsListScreen extends StatelessWidget {
+  const ArtistsListScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Світові художники'),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
+      body: ListView.builder(
+        itemCount: artists.length,
+        itemBuilder: (context, index) {
+          final artist = artists[index];
+
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            elevation: 3,
+            child: ListTile(
+              leading: SizedBox(
+                width: 60,
+                height: 60,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    artist.imageUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              title: Text(
+                artist.name,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                artist.description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 18),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ArtistDetailsScreen(artist: artist),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ArtistDetailsScreen extends StatelessWidget {
+  final Artist artist;
+
+  const ArtistDetailsScreen({super.key, required this.artist});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(artist.name),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              artist.imageUrl,
+              width: double.infinity,
+              height: 300,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                artist.description,
+                style: const TextStyle(fontSize: 18, height: 1.4),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
